@@ -1,4 +1,4 @@
-package ui;
+package source_code;
 
 import algorithms.BFS;
 import algorithms.DFS;
@@ -11,9 +11,9 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+            // Create main frame
             JFrame frame = new JFrame("Pathfinding Visualizer");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(700, 800);
             frame.setLayout(new BorderLayout());
 
             // Create Grid Panel
@@ -26,7 +26,13 @@ public class Main {
             JButton bfsButton = new JButton("Run BFS");
             JButton resetButton = new JButton("Reset");
 
-            // Add Button Actions
+            // Ensure GridPanel is Initialized
+            if (gridPanel == null) {
+                JOptionPane.showMessageDialog(frame, "GridPanel failed to initialize!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // DFS Button Action
             dfsButton.addActionListener(e -> {
                 if (gridPanel.getStartNode() == null || gridPanel.getEndNode() == null) {
                     JOptionPane.showMessageDialog(frame, "Select a Start and End point!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -35,10 +41,14 @@ public class Main {
                 gridPanel.resetVisited();
                 List<Node> path = new java.util.ArrayList<>();
                 boolean found = DFS.search(gridPanel.getGrid(), gridPanel.getStartNode(), gridPanel.getEndNode(), path);
-                if (found) gridPanel.showPath(path);
-                else JOptionPane.showMessageDialog(frame, "No Path Found!", "Info", JOptionPane.INFORMATION_MESSAGE);
+                if (found) {
+                    gridPanel.showPath(path);
+                } else {
+                    JOptionPane.showMessageDialog(frame, "No Path Found!", "Info", JOptionPane.INFORMATION_MESSAGE);
+                }
             });
 
+            // BFS Button Action
             bfsButton.addActionListener(e -> {
                 if (gridPanel.getStartNode() == null || gridPanel.getEndNode() == null) {
                     JOptionPane.showMessageDialog(frame, "Select a Start and End point!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -46,10 +56,14 @@ public class Main {
                 }
                 gridPanel.resetVisited();
                 List<Node> path = BFS.search(gridPanel.getGrid(), gridPanel.getStartNode(), gridPanel.getEndNode());
-                if (!path.isEmpty()) gridPanel.showPath(path);
-                else JOptionPane.showMessageDialog(frame, "No Path Found!", "Info", JOptionPane.INFORMATION_MESSAGE);
+                if (!path.isEmpty()) {
+                    gridPanel.showPath(path);
+                } else {
+                    JOptionPane.showMessageDialog(frame, "No Path Found!", "Info", JOptionPane.INFORMATION_MESSAGE);
+                }
             });
 
+            // Reset Button Action
             resetButton.addActionListener(e -> gridPanel.resetGrid());
 
             // Add Buttons to Control Panel
@@ -58,7 +72,9 @@ public class Main {
             controlsPanel.add(resetButton);
             frame.add(controlsPanel, BorderLayout.SOUTH);
 
-            // Finalize and Display Window
+            // Properly Set Frame Size
+            frame.pack(); // Automatically resizes based on components
+            frame.setLocationRelativeTo(null); // Centers the window on screen
             frame.setVisible(true);
         });
     }
