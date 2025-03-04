@@ -62,6 +62,8 @@ public class GridPanel extends JPanel {
                 node.setPath(false);
                 node.setTraversal(false);
                 node.setBacktrack(false);
+                node.setG(Integer.MAX_VALUE);
+
             }
         }
         finalPath.clear();
@@ -73,6 +75,8 @@ public class GridPanel extends JPanel {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 grid[row][col] = new Node(row, col);
+                grid[row][col].setG(Integer.MAX_VALUE);
+
             }
         }
         startNode = null;
